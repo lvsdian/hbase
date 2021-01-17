@@ -12,7 +12,7 @@
 
 ##### 逻辑结构
 
-​	![](img\1.png)
+​	![](img/1.png)
 
 - 一张表分成多个文件夹，一个列族对应一个文件夹，一个或多个列组成一个列族
 
@@ -25,7 +25,7 @@
 
 ##### 物理存储结构
 
-​	![](C:\Users\LSD\Desktop\hbase\img\2.png)
+​	![](img/2.png)
 
 ##### 数据模型
 
@@ -55,7 +55,7 @@
 
 #### 基本架构
 
-​	![](C:\Users\LSD\Desktop\hbase\img\3.png)
+​	![](img/3.png)
 
 - Region Server
 
@@ -96,31 +96,31 @@
 
 - `create 'student', 'info'`：创建一个`student`表，有一个列族`info`
 
-  ![](C:\Users\LSD\Desktop\hbase\img\4.png)
+  ![](img/4.png)
 
 - `create 'stu', 'info1', 'info2'`：创建stu表，有两个列族
 
-  ![](C:\Users\LSD\Desktop\hbase\img\5.png)
+  ![](img/5.png)
 
 - `describe 'student'`：查看表信息
 
-  ![](C:\Users\LSD\Desktop\hbase\img\6.png)
+  ![](img/6.png)
 
 - `alter 'student', {NAME=> 'info', VERSIONS=>3}`：hbase默认存储1个版本的数据，如此修改后，会保存3个版本的数据
 
-  ![](C:\Users\LSD\Desktop\hbase\img\7.png)
+  ![](img/7.png)
 
 - `drop 'student'`：删除表
 
-  ![](C:\Users\LSD\Desktop\hbase\img\8.png)
+  ![](img/8.png)
 
 - `create_namespace 'bigdata'`：创建命名空间（相当于mysql建库）
 
-  ![](C:\Users\LSD\Desktop\hbase\img\9.png)
+  ![](img/9.png)
 
 - `create "bigdata:stu", "info"`：在`bigdata`这个命名空间下创建表`stu`，如果想要删除`bigdata`这个命名空间，则需要先`disable "bigdata:stu"`，然后`drop "bigdata:stu"`，再`drop "bigdata"`
 
-  ![](C:\Users\LSD\Desktop\hbase\img\10.png)
+  ![](img/10.png)
 
 
 
@@ -128,37 +128,37 @@
 
 - put 
 
-![](C:\Users\LSD\Desktop\hbase\img\18.png)
+![](img/18.png)
 
-​	![](C:\Users\LSD\Desktop\hbase\img\19.png)
+​	![](img/19.png)
 
 - get
 
-​	![](C:\Users\LSD\Desktop\hbase\img\11.png)
+​	![](img/11.png)
 
 - scan
 
-![](C:\Users\LSD\Desktop\hbase\img\12.png)
+![](img/12.png)
 
 - delete
 
-![](C:\Users\LSD\Desktop\hbase\img\13.png)
+![](img/13.png)
 
-![](C:\Users\LSD\Desktop\hbase\img\14.png)
+![](img/14.png)
 
-![](C:\Users\LSD\Desktop\hbase\img\15.png)
+![](img/15.png)
 
 - deleteall：删除rowkey
 
-![](C:\Users\LSD\Desktop\hbase\img\16.png)
+![](img/16.png)
 
-- truncate：清空表![](C:\Users\LSD\Desktop\hbase\img\17.png)
+- truncate：清空表![](img/17.png)
 
 ### 进阶
 
 #### 详细架构
 
-![](C:\Users\LSD\Desktop\hbase\img\20.png)
+![](img/20.png)
 
 - HBase底层是依赖于HDFS的，所以会有HDFS的DataNode
 - HBse依赖于Zookeeper，客户端无论找HMaster还是RegionServer，都先找ZK
@@ -172,7 +172,7 @@
 
 #### 写流程
 
-​		![](C:\Users\LSD\Desktop\hbase\img\21.png)
+​		![](img/21.png)
 
 1. 客户端连接ZK，查询meta表（即记录region的位置信息的表）所在的RegionServer是哪一个
 2. 找到meta表所在的机器后（假设meta表在hadoop102机器），查看hadoop102机器中的meta表记录的目标表的位置（假设目标表在hadoop103机器）。将meta信息做一个缓存，下次先查缓存，如果缓存没有meta表信息，再找ZK
@@ -182,7 +182,7 @@
 
 - 写流程中，给客户端返回ack之后，HBase还会在合适时执行刷盘操作
 
-  ![](C:\Users\LSD\Desktop\hbase\img\22.png)
+  ![](img/22.png)
 
 - 最小的刷写单元是region，而不是单个的memstore，刷写时机：
 
@@ -198,7 +198,7 @@
 
 #### 写流程
 
-![](C:\Users\LSD\Desktop\hbase\img\23.png)
+![](img/23.png)
 
 1. 客户端连接ZK，查询meta表（即记录region的位置信息的表）所在的RegionServer是哪一个
 2. 找到meta表所在的机器后（假设meta表在hadoop102机器），查看hadoop102机器中的meta表记录的目标表的位置（假设目标表在hadoop103机器）。将meta信息做一个缓存，下次先查缓存，如果缓存没有meta表信息，再找ZK
@@ -215,7 +215,7 @@
   - Minor Compaction 会将临近的若干个较小的 HFile 合并成一个较大的 HFile，但**不会***清理过期和删除的数据。 
   - Major Compaction 会将一个 Store 下的所有的 HFile 合并成一个大 HFile，并且**会**清理掉过期 和删除的数据
 
-  ![](C:\Users\LSD\Desktop\hbase\img\24.png)
+  ![](img/24.png)
 
 #### Region Split
 
@@ -226,7 +226,7 @@
   1. 当1个region中的某个Store下所有StoreFile的总大小超过`hbase.hregion.max.filesize`， 该 Region 就会进行拆分（0.94 版本之前）。 
   2.  当 1 个 region 中 的 某 个 Store 下所有 StoreFile 的 总 大 小 超 过 `Min(R^2 * "hbase.hregion.memstore.flush.size", hbase.hregion.max.filesize")`，该 Region 就会进行拆分，其 中 R 为当前 Region Server 中属于该 Table 的个数（0.94 版本之后）。
 
-  ![](C:\Users\LSD\Desktop\hbase\img\25.png)
+  ![](img/25.png)
 
 ### API
 
@@ -260,33 +260,33 @@
 
   - 手动设置预分区
 
-    ![](C:\Users\LSD\Desktop\hbase\img\26.png)
+    ![](img/26.png)
 
   - 生成分区
 
-    ![](C:\Users\LSD\Desktop\hbase\img\27.png)
+    ![](img/27.png)
 
   - 按16进制序列预分区，指定分区数
 
-    ![](C:\Users\LSD\Desktop\hbase\img\28.png)
+    ![](img/28.png)
 
   - 生成分区
 
-    ![](C:\Users\LSD\Desktop\hbase\img\29.png)
+    ![](img/29.png)
 
-    ![](C:\Users\LSD\Desktop\hbase\img\30.png)
+    ![](img/30.png)
 
   - 文件中预设分区
 
-    ![](C:\Users\LSD\Desktop\hbase\img\31.png)
+    ![](img/31.png)
 
-    ![](C:\Users\LSD\Desktop\hbase\img\32.png)
+    ![](img/32.png)
 
-    ![](C:\Users\LSD\Desktop\hbase\img\33.png)
+    ![](img/33.png)
 
   - 生成分区
 
-    ![](C:\Users\LSD\Desktop\hbase\img\34.png)
+    ![](img/34.png)
 
   - API中创建预分区
 
